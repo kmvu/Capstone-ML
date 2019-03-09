@@ -4,11 +4,9 @@ Khang Vu
 
 December 31st, 2050
 
-## Proposal
-_(approx. 2-3 pages)_
+## Proposal ##
 
-### Domain Background
-_(approx. 1-2 paragraphs)_
+### Domain Background ###
 
 #### Background
 Consider the case when we are passionate about flowers, and we are curious at the same time about what type of flower they are, what name people usually call them, etc.
@@ -20,26 +18,33 @@ The main goal for this project is to create an intelligent ML model using differ
 
 This project will be very helpful and diverse in technical term, by using various Machine Learning (ML) techniques from Supervised Learning, EDA, to Deep Learning, etc. Apart from that, recognizing objects has been an interesting topic in recent years since it can make our applications smarter by learning and making predictions by themselves in different categories without being explicitly programmed, which is interestingly motivated to put in the efforts.
 
-### Datasets and Inputs
-_(approx. 2-3 paragraphs)_
+### Datasets and Inputs ###
 
-There are 102 flower categories commonly occurring in the United Kingdom. [*Maria-Elena Nilsback*](http://www.robots.ox.ac.uk/~men/) and [*Andrew Zisserman*](http://www.robots.ox.ac.uk/~az/), in *Department of Engineering Science* at the **University of Oxford**, have decided to create 102 category datasets, corresponding to the aforementioned 102 flower categories, or so-called **classes** interchangeably. In details, each class consists of **40 to 258 images**. Visualization about each class (name, image, label number, etc.) can be found at [this site](http://www.robots.ox.ac.uk/~vgg/data/flowers/102/categories.html).
+There are 102 flower categories commonly occurring in the United Kingdom. [*Maria-Elena Nilsback*][1] and [*Andrew Zisserman*][2], in *Department of Engineering Science* at the **University of Oxford**, have decided to create 102 category datasets, corresponding to the aforementioned 102 flower categories, or so-called **classes** interchangeably. In details, each class consists of **40 to 258 images**. Visualization about each class (name, image, label number, etc.) can be found at [this site][3].
 
-According to [Visual Geometry Group](http://www.robots.ox.ac.uk/~vgg/data/flowers/102/) at the University of Oxford:
+According to [Visual Geometry Group][4] at the University of Oxford:
 
 > The images have large scale, pose and light variations. In addition, there are categories that have large variations within the category and several very similar categories. The dataset is visualized using isomap with shape and colour features.
 
 This dataset has already contained good amount of different flower types, and it especially contains images for each **class**. Hence, we can directly use them to start training our model without having to bring in more data images from another sources to fill up missing **classes**. However, since this dataset contains all images in one folder, we need put these images of each flower types into their respective folders so can we load them in and classify them accordingly. We also need to separate them into *Training*, *Testing*, and *Validation* folders for their own purposes. *Training* and *Testing* folders are used for training our model, then we use *Validation* folder to validate our model after training in order to avoid ***overfitting problem***. This can count as part of the pre-processing step for our dataset. Additionally, It is better to verify that our model performs well with new set of images (and not just from images that it already knew). This way we can raise our confidence that it can predict flowers' names that it has never seen before.
 
-### Problem Statement
-_(approx. 1 paragraph)_
+***References***:
+- http://www.robots.ox.ac.uk/~men/
+- http://www.robots.ox.ac.uk/~az/
+- http://www.robots.ox.ac.uk/~vgg/data/flowers/102/categories.html
+- http://www.robots.ox.ac.uk/~vgg/data/flowers/102/
+
+[1]: http://www.robots.ox.ac.uk/~men/ "http://www.robots.ox.ac.uk/~men/"
+[2]: http://www.robots.ox.ac.uk/~az/ "http://www.robots.ox.ac.uk/~az/"
+[3]: http://www.robots.ox.ac.uk/~vgg/data/flowers/102/categories.html "http://www.robots.ox.ac.uk/~vgg/data/flowers/102/categories.html"
+[4]: http://www.robots.ox.ac.uk/~vgg/data/flowers/102/ "http://www.robots.ox.ac.uk/~vgg/data/flowers/102/"
+
+### Problem and Solution Statements ###
 
 #### Quantifiable
-Given we have a batch of different types of flowers, and we want to classify them by matching with their corresponding type names. In other words, we will label these flower types by printing their corresponding names under their images as results. In order to figure out the corresponding names for the flowers, we can calculate the probabilities for each **classes** represented by output layer from a Deep Neural Network, which should produces the likelihood of those classified names. And from there, we can predict the corresponding name for the image by taking the class with largest probability within 102 output predictions. These outputs are represented in form of probabilities because we use [Softmax function](https://en.wikipedia.org/wiki/Softmax_function) to calculate probabilities distribution across our **classes**.
+Given we have a batch of different types of flowers, and we want to classify them by matching with their corresponding type names. In other words, we will label these flower types by printing their corresponding names under their images as results. In order to figure out the corresponding names for the flowers, we can calculate the probabilities for each **classes** represented by output layer from a Deep Neural Network, which should produces the likelihood of those classified names. And from there, we can predict the corresponding name for the image by taking the class with largest probability within 102 output predictions. These outputs are represented in form of probabilities because we use [Softmax function][5] to calculate probabilities distribution across our **classes**.
 
 > In mathematics, the softmax function, also known as **softargmax** or **normalized exponential function**, is a function that takes as input a vector of K real numbers, and normalizes it into a probability distribution consisting of K probabilities.
-
-Reference: [Softmax function - wikipedia](https://en.wikipedia.org/wiki/Softmax_function)
 
 #### Measurable
 *Accuracy* is a metric we can use to measure our predicting performance since we can clearly observe the percentage of how many images (each represents one flower type) being correctly classified out of 102 flower types.
@@ -60,18 +65,27 @@ Accuracy = True Positives / 102
 ```
 
 #### Replicable
-This flower classification problem should be able to be reproduced by taking images of different flowers and making predictions accordingly again and again.
+This classification problem should be reproducible by taking images of different flowers and making predictions accordingly again and again.
 
-### Solution Statement
-_(approx. 1 paragraph)_
+***References***:
+- [Softmax function - wikipedia](https://en.wikipedia.org/wiki/Softmax_function)
 
-This flower classifying problem could be solved using Deep Neural Networks (DNNs) at the core to calculate the probabilities as final output, which will potentially tell us the flower types. We could also use Image Augmentation technique to vary the input types so that the network can learn better in terms of diversity.
+[5]: https://en.wikipedia.org/wiki/Softmax_function "https://en.wikipedia.org/wiki/Softmax_function"
 
-Developers can make use of [CoreML (iOS)](https://developer.apple.com/machine-learning/) or [ML Kit (Android)](https://developers.google.com/ml-kit/) to convert and incorporate this ML model into their platforms and start making predictions right on their respective devices.
+### Solution Statement ###
 
-In this section, clearly describe a solution to the problem. The solution should be applicable to the project domain and appropriate for the dataset(s) or input(s) given. Additionally, describe the solution thoroughly such that it is clear that the solution is quantifiable (the solution can be expressed in mathematical or logical terms) , measurable (the solution can be measured by some metric and clearly observed), and replicable (the solution can be reproduced and occurs more than once).
+Firstly, we need to make sure our dataset is clean by pre-processing it using various EDA techniques. Then we will be using a Deep Neural Networks (DNN) at the core to train our data, and calculate the probabilities as final output after making predictions, which will potentially tell us the flower types. We could also use Image Augmentation technique to vary the input types so that the network can learn better in terms of diversity, as part of data pre-processing step. We then use `Accuracy` metric to see how accurate our model performs after training.
 
-### Benchmark Model
+After all, developers can make use of [CoreML (iOS)][6] or [ML Kit (Android)][7] to convert and incorporate this ML model into their platforms and start making predictions right on their respective devices as real applications.
+
+***References***:
+- https://developer.apple.com/machine-learning/
+- https://developers.google.com/ml-kit/
+
+[6]: https://developer.apple.com/machine-learning/ "https://developer.apple.com/machine-learning/"
+[7]: https://developers.google.com/ml-kit/ "https://developers.google.com/ml-kit/"
+
+### Benchmark Model ###
 _(approximately 1-2 paragraphs)_
 
 In this section, provide the details for a benchmark model or result that relates to the domain, problem statement, and intended solution. Ideally, the benchmark model or result contextualizes existing methods or known information in the domain and problem given, which could then be objectively compared to the solution. Describe how the benchmark model or result is measurable (can be measured by some metric and clearly observed) with thorough detail.
