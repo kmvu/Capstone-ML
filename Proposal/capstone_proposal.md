@@ -5,6 +5,7 @@ Khang Vu
 December 31st, 2050
 
 ## Proposal ##
+==============
 
 ### Domain Background ###
 
@@ -39,7 +40,7 @@ This dataset has already contained good amount of different flower types, and it
 [3]: http://www.robots.ox.ac.uk/~vgg/data/flowers/102/categories.html "http://www.robots.ox.ac.uk/~vgg/data/flowers/102/categories.html"
 [4]: http://www.robots.ox.ac.uk/~vgg/data/flowers/102/ "http://www.robots.ox.ac.uk/~vgg/data/flowers/102/"
 
-### Problem and Solution Statements ###
+### Problem Statement ###
 
 #### Quantifiable
 Given we have a batch of different types of flowers, and we want to classify them by matching with their corresponding type names. In other words, we will label these flower types by printing their corresponding names under their images as results. In order to figure out the corresponding names for the flowers, we can calculate the probabilities for each **classes** represented by output layer from a Deep Neural Network, which should produces the likelihood of those classified names. And from there, we can predict the corresponding name for the image by taking the class with largest probability within 102 output predictions. These outputs are represented in form of probabilities because we use [Softmax function][5] to calculate probabilities distribution across our **classes**.
@@ -48,21 +49,6 @@ Given we have a batch of different types of flowers, and we want to classify the
 
 #### Measurable
 *Accuracy* is a metric we can use to measure our predicting performance since we can clearly observe the percentage of how many images (each represents one flower type) being correctly classified out of 102 flower types.
-
-*Accuracy* can be calculated as following:
-```
-Accuracy = (True Positives + True Negatives) / 102 (dataset size)
-```
-
-where:
-  * **True Positives** is the number of images which are correctly classified.
-  * **True Negatives**, which is not available in this case for a classification problem since we only have either "This type of flower" or "that type of flower".
-
-Hence the formula can be shortened as:
-
-```
-Accuracy = True Positives / 102
-```
 
 #### Replicable
 This classification problem should be reproducible by taking images of different flowers and making predictions accordingly again and again.
@@ -86,25 +72,50 @@ After all, developers can make use of [CoreML (iOS)][6] or [ML Kit (Android)][7]
 [7]: https://developers.google.com/ml-kit/ "https://developers.google.com/ml-kit/"
 
 ### Benchmark Model ###
-_(approximately 1-2 paragraphs)_
 
-In this section, provide the details for a benchmark model or result that relates to the domain, problem statement, and intended solution. Ideally, the benchmark model or result contextualizes existing methods or known information in the domain and problem given, which could then be objectively compared to the solution. Describe how the benchmark model or result is measurable (can be measured by some metric and clearly observed) with thorough detail.
+Compared to the project [`Dog breed` classification problem][8], as the fourth project in this Machine Learning Nanodegree at Udacity, this flower classification problem can be seen as somewhat similar to the `Dog breed` project. Both have the same task of trying to recognize / predict the objects' type (`dog` and `flower`). We can, indeed, use this `Dog breed` project as our benchmark model to compare our model to, as we will use *Transfer learning* technique and apply to our Deep Neural Network (DNN) to make predictions. Hence, most of the aspects from both projects should be resembled and observed in the same way. (Quantifiable, measurable, replicable)
+
+The model trained in `Dog breed` has reached **71.7703%** of accuracy, and we will try to reach this number or even better for our flower classification problem. Since we as well use `Accuracy` as the main metric to observe the model performance, and also use *Convolutional Neural Network (CNN)*, as one of the powerful type of DNNs out there, to filter spacial information in the images and train our dataset.
+
+**References**
+
+- https://github.com/kmvu/dog_classification
+
+[8]: https://github.com/kmvu/dog_classification "Dog breed - Khang Vu (Github)"
 
 ### Evaluation Metrics
-_(approx. 1-2 paragraphs)_
 
-In this section, propose at least one evaluation metric that can be used to quantify the performance of both the benchmark model and the solution model. The evaluation metric(s) you propose should be appropriate given the context of the data, the problem statement, and the intended solution. Describe how the evaluation metric(s) are derived and provide an example of their mathematical representations (if applicable). Complex evaluation metrics should be clearly defined and quantifiable (can be expressed in mathematical or logical terms).
+As mentioned in Problem Statement, we will be using `Accuracy` to measure our model's performance. In some cases, `Accuracy` is not enough to measure our performance properly and we need use F-beta score to make sure . However, in this case, either `False Positives` or `False Negatives` is not a big problem, because they just simply mean "No, this is not a ... type".
 
-### Project Design
+*Accuracy* can be calculated as following:
+```
+Accuracy = (True Positives + True Negatives) / 102 (dataset size)
+```
+
+where:
+  * **True Positives** is the number of images which are correctly classified / predicted.
+  * **True Negatives**, which is not available in this case for a classification problem since we only have either "This type of flower" or "that type of flower".
+
+Hence the formula can be shortened as:
+
+```
+Accuracy = True Positives / 102
+```
+
+Optionally, we can multiply the result by 100 to turn it into percentage format, if necessary.
+
+### Project Design ###
 _(approx. 1 page)_
+
+####
 
 In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
 
------------
+---------
 
-**Before submitting your proposal, ask yourself. . .**
+## Q&A ##
 
-- Does the proposal you have written follow a well-organized structure similar to that of the project template?
+- Does the proposal you have written follow a well-organized structure similar to that of the project template? **Yes**
 - Is each section (particularly **Solution Statement** and **Project Design**) written in a clear, concise and specific fashion? Are there any ambiguous terms or phrases that need clarification?
 - Would the intended audience of your project be able to understand your proposal?
 - Have you properly proofread your proposal to assure there are minimal grammatical and spelling mistakes?
