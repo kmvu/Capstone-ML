@@ -17,11 +17,11 @@ This classification use case is one of the problem hosted by `Kaggle`, where:
 
 > Kaggle is a platform for predictive modelling and analytics competitions in which statisticians and data miners compete to produce the best models for predicting and describing the datasets uploaded by companies and users. This crowdsourcing approach relies on the fact that there are countless strategies that can be applied to any predictive modelling task and it is impossible to know beforehand which technique or analyst will be most effective.[Kaggle]
 
-[Click here](https://www.kaggle.com/c/oxford-102-flower-pytorch) for more information in Kaggle, about `Oxford 102 Flower Pytorch -102 Flower Classification Created by Enthusiast's` competition. Even though the competition requires a solution in Pytorch, we will instead use Keras in this project.
+[Click here](https://www.kaggle.com/c/oxford-102-flower-pytorch) for more information in Kaggle, about `Oxford 102 Flower Pytorch - 102 Flower Classification Created by Enthusiast's` competition. Even though the competition requires a solution in Pytorch, we will instead use Keras in this project.
 
 ***References***
 
-- [Kaggle](https://www.kaggle.com/c/oxford-102-flower-pytorch "https://www.kaggle.com/c/oxford-102-flower-pytorch")
+- [Kaggle](https://medium.com/neuralspace/kaggle-1-winning-approach-for-image-classification-challenge-9c1188157a86 "https://medium.com/neuralspace/kaggle-1-winning-approach-for-image-classification-challenge-9c1188157a86")
 
 #### Purposes and Motivation
 The main goal for this project is to create an intelligent Machine Learning (ML) model using different techniques to help us recognize most of the common flower types. And this model could be used to integrate into mobile apps, devices to help predict and open more opportunities for developers to innovate, especially if they are passionate about flowers.
@@ -34,11 +34,11 @@ There are 102 flower categories commonly occurring in the United Kingdom. [*Mari
 
 According to [Visual Geometry Group][4] at the University of Oxford:
 
-> The images have large scale, pose and light variations. In addition, there are categories that have large variations within the category and several very similar categories. The dataset is visualized using isomap with shape and colour features.[4]
+> The images have large scale, pose and light variations. In addition, there are categories that have large variations within the category and several very similar categories. The dataset is visualized using isomap with shape and colour features.(4)
 
 This dataset has already contained good amount of different flower types, and it especially contains images for each **class**. Hence, we can directly use them to start training our model without having to bring in more data images from another sources to fill up missing **classes**.
 
-Within this dataset, we have three folders *Training*, *Validation*, and *Testing*, which stand for their own purposes, respectively. Each folder should contain 102 categories, and each category contains **40 to 258 images**. *Training* and *Validation* folders are used for training our model, then we use *Testing* folder to validate our model after training in order to avoid ***overfitting problem***. This can count as part of the pre-processing step for our dataset. Additionally, It is better to verify that our model performs well with new set of images (and not just from images that it already knew). This way we can raise our confidence that it can predict flowers' names that it has never seen before.
+Within this dataset, we have three folders *Training*, *Validation*, and *Testing*, which stand for their own purposes, respectively. Each folder should contains 102 categories, and each category contains **40 to 258 images**. *Training* and *Validation* folders are used for training our model, then we use *Testing* folder to validate our model after training in order to avoid ***overfitting problem***. This can count as part of the pre-processing step for our dataset. Additionally, It is better to verify that our model performs well with new set of images (and not just from images that it already knew). This way we can raise our confidence that it can predict flowers' names that it has never seen before.
 
 ***References***:
 - http://www.robots.ox.ac.uk/~men/
@@ -54,9 +54,9 @@ Within this dataset, we have three folders *Training*, *Validation*, and *Testin
 ### Problem Statement ###
 
 #### Quantifiable
-Given we have a batch of different types of flowers, and we want to classify them by matching with their corresponding type names. In other words, we will label these flower types by printing their corresponding names under their images as results. In order to figure out the corresponding names for the flowers, we can calculate the probabilities for each **classes** represented by an output layer from a Deep Neural Network, which should produces the maximum likelihood of those classified names.
+Given a batch of different types of flowers, and we want to classify them by matching with their corresponding type names. In other words, we will label these flower types by printing their corresponding names under their images as results. In order to figure out the corresponding names for the flowers, we can calculate the probabilities for each **classes** represented by an output layer from a Deep Neural Network, which should produces the maximum likelihood of those classified names.
 
-> A deep neural network (DNN) is an artificial neural network (ANN) with multiple layers between the input and output layers. The DNN finds the correct mathematical manipulation to turn the input into the output, whether it be a linear relationship or a non-linear relationship. The network moves through the layers calculating the probability of each output.[5]
+> A deep neural network (DNN) is an artificial neural network (ANN) with multiple layers between the input and output layers. The DNN finds the correct mathematical manipulation to turn the input into the output, whether it be a linear relationship or a non-linear relationship. The network moves through the layers calculating the probability of each output.(5)
 
 And from there, we can predict the corresponding name for the image by taking the class with largest probability within 102 output predictions. These outputs are represented in form of probabilities because we use [Softmax function][5] to calculate probabilities distribution across our **classes**.
 
@@ -78,7 +78,7 @@ This classification problem should be reproducible by taking images of different
 
 Firstly, we need to make sure our dataset is clean by pre-processing it using various Exploratory Data Analysis ([EDA][6]) techniques. Then we will be using a Deep Neural Networks (DNN) at the core to train our data, and calculate the probabilities as final output after making predictions, which will potentially tell us the flower types. We could also use Image Augmentation technique to vary the input types so that the network can learn better in terms of diversity, as part of data pre-processing step. We then use `Accuracy` metric to see how accurate our model performs after training.
 
-> Exploratory Data Analysis refers to the critical process of performing initial investigations on data so as to discover patterns,to spot anomalies,to test hypothesis and to check assumptions with the help of summary statistics and graphical representations.[6]
+> Exploratory Data Analysis refers to the critical process of performing initial investigations on data so as to discover patterns, to spot anomalies, to test hypothesis and to check assumptions with the help of summary statistics and graphical representations.(6)
 
 After all, developers can make use of [CoreML (iOS)][7] or [ML Kit (Android)][8] to convert and incorporate this ML model into their platforms and start making predictions right on their respective devices as real applications.
 
@@ -98,7 +98,7 @@ Before diving into any algorithms, we can make a simple benchmark model to compa
 
 > With transfer learning, instead of starting the learning process from scratch, you start from patterns that have been learned when solving a different problem. This way you leverage previous learnings and avoid starting from scratch.[Transfer Learning]
 
-With this approach, the benchmark model should be able to give us a sense of how accurate it can performs with the pre-trained weights without us modifying much. It is also a good idea to do benchmarking on a simple pre-trained model, and also benchmark by using another complex model to observe better the overfitting and underfitting problem on the given model.
+With this approach, the benchmark model should be able to give us a sense of how accurate it can performs with the pre-trained weights without us modifying too much. It is also a good idea to do benchmarking on a simple pre-trained model, and also benchmark by using another complex model to observe better the overfitting and underfitting problem on the given model.
 
 ***References***
 
@@ -108,7 +108,7 @@ With this approach, the benchmark model should be able to give us a sense of how
 
 ### Evaluation Metrics
 
-As mentioned in Problem Statement, we will be using `Accuracy` to measure our model's performance. In some cases, `Accuracy` is not enough to measure our performance properly and we need use F-beta score by determining whether we need a high `Recall` score or a high `Precision` score. However, in this case, either `False Positives` or `False Negatives` is not a big problem, because they just simply mean "No, this is not a *xyz* type". So we can use `Accuracy` to measure our model performance.
+As mentioned in Problem Statement, we will be using `Accuracy` to measure our model's performance. In some cases, `Accuracy` is not enough to measure our performance properly and we need to use F-beta score by determining whether we need a high `Recall` score or a high `Precision` score. However, in this case, either `False Positives` or `False Negatives` is not a big problem, because they just simply mean "No, this is not a *xyz* type". So we can use `Accuracy` to measure our model performance.
 
 *Accuracy* can be calculated as following:
 ```
@@ -117,7 +117,7 @@ Accuracy = (True Positives + True Negatives) / 102 (dataset size)
 
 where:
   * **True Positives** is the number of images which are correctly classified / predicted.
-  * **True Negatives**, which is not available in this case for a classification problem since we only have either "This type of flower" or "that type of flower".
+  * **True Negatives**, which is not available in this case for a classification problem since we only have either "this type of flower" or "that type of flower".
 
 Hence the formula can be shortened as:
 
@@ -142,6 +142,8 @@ from sklearn.datasets import load_files
 
 and load the corresponding images into our `train_files`, `valid_files`, and `test_files` variables, respectively.
 
+#### Create our DNN
+
 We will use a Convolutional Neural Network (CNN) in **Keras Neural Network API** to train our dataset. While Keras using TensorFlow as backend, the CNN will require a 4-D array as input:
 
 ```
@@ -163,18 +165,10 @@ model = VGG19(weights='imagenet', include_top=False)
 
 As mentioned above, this model will first serve as a benchmark model, before we improve it by fine-tuning parameters and training some desired layers in the network as discussed in the `Benchmark` section.
 
+#### Testing and Visualization
+
 Eventually, once our model is trained, we can check the results by visualizing them using a [*Confusion Matrix*](https://medium.com/neuralspace/kaggle-1-winning-approach-for-image-classification-challenge-9c1188157a86) to improve on it (e.g. add more data augmentation to the classes that have been misclassified, etc.). Then we merge the validation set into the original training set, and test it against *Testing* folder to make sure it is not overfitting or underfitting our validation set. Also calculate and observe the accuracy of the model to make sure it performs well enough.
 
 Once we are satisfied, we are ready to use this trained model to predict flower types for our problem using the maximum of the probability outputs.
 
 [10]: https://arxiv.org/pdf/1106.1813.pdf "Synthetic Minority Over-sampling Technique"
-
----------
-
-## Q&A ##
-
-- Does the proposal you have written follow a well-organized structure similar to that of the project template? **Yes**
-- Is each section (particularly **Solution Statement** and **Project Design**) written in a clear, concise and specific fashion? ***Yes***. Are there any ambiguous terms or phrases that need clarification? ***No***
-- Would the intended audience of your project be able to understand your proposal? ***Yes***
-- Have you properly proofread your proposal to assure there are minimal grammatical and spelling mistakes? ***Yes***
-- Are all the resources used for this project correctly cited and referenced? ***Yes***
