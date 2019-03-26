@@ -108,31 +108,13 @@ With this approach, the benchmark model should be able to give us a sense of how
 
 ### Evaluation Metrics
 
-As mentioned in Problem Statement, we will be using `Accuracy` to measure our model's performance. In some cases, `Accuracy` is not enough to measure our performance properly and we need to use F-beta score by determining whether we need a high `Recall` score or a high `Precision` score. However, in this case, either `False Positives` or `False Negatives` is not a big problem, because they just simply mean "No, this is not a *xyz* type". So we can use `Accuracy` to measure our model performance.
-
-*Accuracy* can be calculated as following:
-```
-Accuracy = (True Positives + True Negatives) / 102 (dataset size)
-```
-
-where:
-  * **True Positives** is the number of images which are correctly classified / predicted.
-  * **True Negatives**, which is not available in this case for a classification problem since we only have either "this type of flower" or "that type of flower".
-
-Hence the formula can be shortened as:
-
-```
-Accuracy = True Positives / 102
-```
-
-Optionally, we can multiply the result by 100 to turn it into percentage format, if necessary.
 
 ### Project Design ###
 
 #### Data Pre-processing
 Since this dataset is already guaranteed to contain about **40 to 258 images** for each class (or category), each category will be represented as one folder inside a parent folder, which is one of the *Training*, and *Validation* folders. The *Testing* folder in the other hand will contain all the images for testing purpose only. We will use *Validation* folder to test our *Training* model in the process and help improve it over time. After finished, *Testing* folder will make sure our model does not overfit or underfit our validation dataset.
 
-As the number of images in each folder varies from 40 to 258 images, it is not really balanced in general and it might affects our performance later. This can be taken care of using [Synthetic Minority Over-sampling Technique (SMOTE)][10] to make our dataset inputs become more even when fed into our network in every batch. We can also use Image Augmentation technique to generate more data using different types of transforms (Crop, Rotate, Resize, Flip transforms, etc.) to make sure our datasets is diverse for training.
+We can also use Image Augmentation technique to generate more data using different types of transforms (Crop, Rotate, Resize, Flip transforms, etc.) to make sure our datasets is diverse for training.
 
 From here, our dataset should be ready to be loaded into our project. We will use `load_files` method in `Scikit-learn` library, the `sklearn.datasets` module by importing it as following:
 
