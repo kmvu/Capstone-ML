@@ -122,6 +122,14 @@ This dataset has already contained good amount of different flower types, and it
 
 Within this dataset, we have three folders *Training*, *Validation*, and *Testing*, which stand for their own purposes, respectively. Each folder should contains 102 categories, and each category contains **40 to 258 images**. *Training* and *Validation* folders are used for training our model, then we use *Testing* folder to validate our model after training in order to avoid ***overfitting problem***. This can count as part of the pre-processing step for our dataset. Additionally, It is better to verify that our model performs well with new set of images (and not just from images that it already knew). This way we can raise our confidence that it can predict flowers' names that it has never seen before.
 
+*Validation* set contains **818 images**, while *Training* set contains **6652 images**. We recognize that *Validation* set will take about **11%** total number of images original for training by following calculation:
+
+```
+[818 / (818 + 6652)] * 100 = 10.95%
+```
+
+
+
 ### Exploratory Visualization
 In this section, you will need to provide some form of visualization that summarizes or extracts a relevant characteristic or feature about the data. The visualization should adequately support the data being used. Discuss why this visualization was chosen and how it is relevant. Questions to ask yourself when writing this section:
 - _Have you visualized a relevant characteristic or feature about the dataset or input data?_
