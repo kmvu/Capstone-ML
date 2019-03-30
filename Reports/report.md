@@ -129,16 +129,11 @@ Since our dataset is mainly based on images, not statistical numbers, we don't h
 
 ### Exploratory Visualization
 
-The following is a screenshot showing 5 different flower types, with 5 images per each category:
+The following screenshot shows five different flower types, with five images per each category (per row):
 
 ![Visualization sample dataset](/images/visualization.png)
 
-
-
-In this section, you will need to provide some form of visualization that summarizes or extracts a relevant characteristic or feature about the data. The visualization should adequately support the data being used. Discuss why this visualization was chosen and how it is relevant. Questions to ask yourself when writing this section:
-- _Have you visualized a relevant characteristic or feature about the dataset or input data?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
+Our model will extract the basic characteristics from the images and try to learn patterns from its features, then combine these knowledges to learn even more common complex patterns between the same type of flower and predict the likelihood flower types eventually as a goal.
 
 ### Algorithms and Techniques
 In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
