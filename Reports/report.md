@@ -109,7 +109,6 @@ Accuracy = True Positives / 102
 Optionally, we can multiply the result by 100 to turn it into percentage format, if necessary.
 
 ## II. Analysis ##
-_(approx. 2-4 pages)_
 
 ### Data Exploration ###
 
@@ -135,11 +134,62 @@ The following screenshot shows five different flower types, with five images per
 
 Our model will extract the basic characteristics from the images and try to learn patterns from its features, then combine these knowledges to learn even more common complex patterns between the same type of flower and predict the likelihood flower types eventually as a goal.
 
-### Algorithms and Techniques
-In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
-- _Are the algorithms you will use, including any default variables/parameters in the project clearly defined?_
-- _Are the techniques to be used thoroughly discussed and justified?_
-- _Is it made clear how the input data or datasets will be handled by the algorithms and techniques chosen?_
+### Algorithms and Techniques ###
+
+In order to solve this flower classification problem, a **Deep Learning architecture** incorporated with **Transfer Learning** technique will be used to learn patterns, extract feature characteristics from images and then combine these knowledges to come up with the most likelihood probabilities for the predicted flowers. We, hence, use this result to classify our flower categories.
+
+Before developing our own **Deep Learning** architecture, we need to make sure our problem is solvable and can be improved, fine-tuned later. A simple **benchmark model** will be used in this case as a starting point, which will be disussed in the next section.
+
+After comparing with the aforementioned benchmark model, we now can use **Transfer Learning** technique to benefit the pre-trained model (VGG-19) by using its *pre-trained weights* to continue training and fit our own problem.
+
+#### Parameters ####
+
+A pre-trained model like VGG-19 will need mandatory parameters such as:
+
+ * ***weights***: *'imagenet'* - is chosen in this case, since we want to reuse the pre-trained weights through 1000 images in **imageNet** database.
+
+ * ***include_top***: *'False'* - is set so we can ignore the output trained from imageNet and use our own custom output layers.
+
+ * ***input_shape***: this parameter specifies an expected size to feed in VGG-19 network (224 width x 224 height x 3 color channels).
+
+ * ***loss***: *'categorical_crossentropy'* - since our problem is multiclass classification, this parameter is proved to produce more accurate result then *'binary-crossentropy'* option.
+
+ * ***optimizers***: *'Adam'*, and ***Learning rate***: *'0.00005''* - this optimizer and learning rate combination has been experimented to reach the optimal result better, even though it takes quite some times to coverge to a local minimum (with help from GPU power).
+
+#### Strategy (Algorithm) ####
+
+Since our dataset is considered as a small dataset (< 10,000 images), and quite similar to **imageNet** database, we need a strategy to make sure we train the pre-trained model in an optimized way to fit our problem. In this case, we will `freeze` all the pre-trained layers in the original network. In other words, we don't train the original layers again, but using the pre-trained weights from **imageNet** instead.
+
+The `include_top` parameter when we initialize the VGG-19 network  makes sure we don't include the original output layer. Hence, in order to fit to our problem, we need to create our custom layers to replace the top layer (output layer) from the original network. We will add a few `Dense` layers and apply some `Dropout` functions to avoid **Overfitting**. It will look like following:
+
+```
+## Freezing all the layers from the original network
+for layer in base_model.layers:
+    layer.trainable = False
+
+# Add some custom layers
+net = Flatten(name='flatten')(base_model.output)
+net = Dense(4096, activation='relu')(net)
+net = Dropout(0.5)(net)
+net = Dense(4096, activation='relu')(net)
+net = Dropout(0.5)(net)
+net = Dense(train_generator.num_classes,
+            activation='softmax')(net) # 102 output classes
+```
+
+This way, once we start training this new customized network, we only spend time to actually train the newly added custom layers while making use of the existing weights for the original layers, which gives our custom layers chances to learn  our dataset to some extend. I mentioned `to some extend` because we don't entirely train this new architecture for too long (just about **10 episodes** and we stop).
+
+At this point, after `10 episodes` of experimentation, the model has been noticed to produce an accuracy of `65%`, not the best performance but it does show that the learning progress has good potential to learn even more and better if we keep training since both *Training* and *Validation* accuracies are simultaneously increasing with a consistent distant gap in between, as following:
+
+![Training progress](/images/training_progress.png)
+
+Before proceeding, we save the weights that have been trained so far as a checkpoint for later use.
+
+Next, we will give our model another chance to learn more. But this time, we will un-freeze the last five layers of the original network (from the Convolutional layers) and let them be trained along with our custom layers. This strategy is known to be quite efficient to train network with a small dataset. What we will do is to load the weights from out checkpoint earlier and start training again using the loaded weights for about `20 episodes`. This process has been experimented and we get an accuracy of `91%`, which is not a bad performance afterall for a classification problem!
+
+The training/validation progress has been recorded as below:
+
+![final_training_progress](/images/final_training_progress.png)
 
 ### Benchmark
 In this section, you will need to provide a clearly defined benchmark result or threshold for comparing across performances obtained by your solution. The reasoning behind the benchmark (in the case where it is not an established result) should be discussed. Questions to ask yourself when writing this section:
