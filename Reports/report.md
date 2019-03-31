@@ -176,12 +176,26 @@ After a preset number of `epochs` of training, and this new model is supposed to
 
 ### Benchmark ###
 
+It is a good idea to setup a benchmark model, which plays a role of making sure that our classification problem is solvable and giving us an idea on how this problem can be solved with just a simple model architecture. Later on, we can use this result to have a confidence that a DNN using Transfer Learning will definitely produce a better result.
 
+This simple benchmark model using in this scenario only includes one Convolutional layer (2D), and one Dense layer as core layers. Then we add a Pooling layer to help reduce space info to filter out features, and a Dropout layer to give each layer a chance to train in the network. Lastly, we need a Dense layer as an output layer to make prediction using a `Softmax` activation function to make sure the results are in form of probabilities. The architecture is as following:
 
-In this section, you will need to provide a clearly defined benchmark result or threshold for comparing across performances obtained by your solution. The reasoning behind the benchmark (in the case where it is not an established result) should be discussed. Questions to ask yourself when writing this section:
-- _Has some result or value been provided that acts as a benchmark for measuring performance?_
-- _Is it clear how this result or value was obtained (whether by data or by hypothesis)?_
+```
+bench_model = Sequential()
+bench_model.add(Conv2D(256, kernel_size=2,
+  input_shape=(224, 224, 3), activation='relu'))
+bench_model.add(GlobalAveragePooling2D())
+bench_model.add(Dropout(0.5))
+bench_model.add(Dense(128, activation='relu'))
+bench_model.add(Dropout(0.2))
+bench_model.add(Dense(train_generator.num_classes,
+  activation='softmax'))
+```
+![Benchmark model](/images/benchmark_model.png)
 
+After five epochs, this benchmark model gives an accuracy of `12.20%`, which is not really but expected, since this model knows nothing about our current dataset.
+
+We will need a model with more knowledge on lower levels, to extract the foundation features out from the given images, using a pre-trained model such as VGG-19, which has already been trained on ImageNet through 1000 images. This way we can modify this pre-trained model using Transfer Learning technique to solve our unique problem with customized Dense layers.
 
 ## III. Methodology
 _(approx. 3-5 pages)_
