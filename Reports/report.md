@@ -50,6 +50,7 @@ According to [Visual Geometry Group][4] at the University of Oxford:
 ### Problem Statement ###
 
 #### Quantifiable ####
+
 Given a batch of different types of flowers, and we want to classify them by matching with their corresponding type names. In other words, we will label these flower types by printing their corresponding names under their images as results. In order to figure out the corresponding names for the flowers, we can calculate the probabilities for each **classes** represented by an output layer from a Deep Neural Network, which should produces the maximum likelihood of those classified names.
 
 > A deep neural network (DNN) is an artificial neural network (ANN) with multiple layers between the input and output layers. The DNN finds the correct mathematical manipulation to turn the input into the output, whether it be a linear relationship or a non-linear relationship. The network moves through the layers calculating the probability of each output.(5)
@@ -193,20 +194,44 @@ bench_model.add(Dense(train_generator.num_classes,
 ```
 ![Benchmark model](/images/benchmark_model.png)
 
-After five epochs, this benchmark model gives an accuracy of `12.20%`, which is not really but expected, since this model knows nothing about our current dataset.
+After five epochs, this benchmark model gives an accuracy of `12.20%`, which is not really good but expected, since this model knows nothing about our current dataset.
 
-We will need a model with more knowledge on lower levels, to extract the foundation features out from the given images, using a pre-trained model such as VGG-19, which has already been trained on ImageNet through 1000 images. This way we can modify this pre-trained model using Transfer Learning technique to solve our unique problem with customized Dense layers.
+We will need a model with more knowledge on lower levels, to extract the foundation features out from the given images, using a pre-trained model such as VGG-19, which has already been trained on ImageNet through 1000 images. This way we can modify this pre-trained model using Transfer Learning technique to solve our unique problem with customized Dense layers to produce a better result.
 
-## III. Methodology
-_(approx. 3-5 pages)_
+## III. Methodology ##
 
-### Data Preprocessing
-In this section, all of your preprocessing steps will need to be clearly documented, if any were necessary. From the previous section, any of the abnormalities or characteristics that you identified about the dataset will be addressed and corrected here. Questions to ask yourself when writing this section:
-- _If the algorithms chosen require preprocessing steps like feature selection or feature transformations, have they been properly documented?_
-- _Based on the **Data Exploration** section, if there were abnormalities or characteristics that needed to be addressed, have they been properly corrected?_
-- _If no preprocessing is needed, has it been made clear why?_
+### Data Preprocessing ###
 
-### Implementation
+For this classification problem, in order to make our dataset more diverse in terms of shape and uniqueness, we make use of **Image Augmentation** technique, where various transformations will be applied to each images before loading in for training. For example, some transformations such as **rotation**, **scale**, **horizontally flip**, **zoom**, etc. can be used to generate more data to feed into our model. This way, we can have more data to train with and make our model learn the features better for each image category (since each can be learned in different angles).
+
+Other than applying transformations, the data images also need to be converted into shape of **(width: 224, height: 224, color channels: 3)** because the pre-trained model like **VGG-19 (or VGG in general)** will expect to have input shape of these dimensions.
+
+In `Keras` APIs, we can perform `Data Augmentation` appropriately by importing:
+
+```
+from keras.preprocessing.image import ImageDataGenerator
+```
+
+and for `preprocessing`:
+
+```
+from keras.applications.vgg19 import preprocess_input
+```
+
+In the process of loading images from given input directories, the above two techniques will be used to load and prepare the data accordingly so that they can be used for training later. The results from this procedure give us `Image Data Generators`, which hold all the preprocessed images that are ready to be used.
+
+***Important Note:***
+There are two parameters before training related to the dataset we loaded in earlier: `train_step_size` and `valid_step_size`. These two parameters are calculated based on the number of images in the respective folders divided by the number of images per batches specified in each Image Generator using for those respective folders.
+
+```
+## Step sizes to fit and train our model later
+train_step_size = train_generator.n // train_generator.batch_size
+valid_step_size = valid_generator.n // valid_generator.batch_size
+```
+
+At this moment, the preparation step is done and the data images are ready to be used for training process.
+
+### Implementation ###
 
 The `include_top` parameter when we initialize the VGG-19 network  makes sure we don't include the original output layer. Hence, in order to fit to our problem, we need to create our custom layers to replace the top layer (output layer) from the original network. We will add a few `Dense` layers and apply some `Dropout` functions to avoid **Overfitting**. It will look like following:
 
@@ -239,11 +264,7 @@ The training/validation progress has been recorded as below:
 
 ![final_training_progress](/images/final_training_progress.png)
 
-
-In this section, the process for which metrics, algorithms, and techniques that you implemented for the given data will need to be clearly documented. It should be abundantly clear how the implementation was carried out, and discussion should be made regarding any complications that occurred during this process. Questions to ask yourself when writing this section:
-- _Is it made clear how the algorithms and techniques were implemented with the given datasets or input data?_
-- _Were there any complications with the original metrics or techniques that required changing prior to acquiring a solution?_
-- _Was there any part of the coding process (e.g., writing complicated functions) that should be documented?_
+After acquiring a desired result, we can plot out the `accuracy` and `loss` values for both **Training* and **Validation** folders to validate/evaluate our model. This will be discussed more in the below.
 
 ### Refinement
 In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
