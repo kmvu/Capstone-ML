@@ -165,7 +165,7 @@ Doing this will allow us to add new extra custom layers in place of the original
 
 After adding new custom layers, we are then ready to train this new architecture network. And since we already froze all the original layers from the pre-trained network, when we train this new entire network again, the original layers' weights will not get updated in the process, but only in the extra layers. This way we can purposely train our extra layers to make sure they gain enough basic knowledges about this classification problem.
 
-After a preset number of `epochs` of training, and this new model is supposed to learn some new knowledges, we will un-freeze a few layers in the original network and let the entire network be trained again for another amount of epochs. This time we should be able to get a model with decent enough accuracy to make predictions.
+Until this point, we will discuss more about two approaches, which have been tried out, in the section `Implementation and Refinement` below. In high level, after a preset number of `epochs` of training, when this new model is supposed to learn some new knowledges, we will un-freeze a few layers in the original network and let the entire network be trained again for another amount of epochs. This time we should be able to get a model with decent enough accuracy to make predictions.
 
 ***Note:***
 
@@ -206,7 +206,7 @@ For this classification problem, in order to make our dataset more diverse in te
 
 Other than applying transformations, the data images also need to be converted into shape of **(width: 224, height: 224, color channels: 3)** because the pre-trained model like **VGG-19 (or VGG in general)** will expect to have input shape of these dimensions.
 
-In `Keras` APIs, we can perform `Data Augmentation` appropriately by importing:
+In `Keras` APIs, we can perform `Data Augmentation` technique  appropriately by importing:
 
 ```
 from keras.preprocessing.image import ImageDataGenerator
@@ -218,7 +218,7 @@ and for `preprocessing`:
 from keras.applications.vgg19 import preprocess_input
 ```
 
-In the process of loading images from given input directories, the above two techniques will be used to load and prepare the data accordingly so that they can be used for training later. The results from this procedure give us `Image Data Generators`, which hold all the preprocessed images that are ready to be used.
+In the process of loading images from given input directories, the above two techniques will be used to load and prepare the data accordingly so that they are ready for training later. The results from this procedure give us `Image Data Generators`, which hold all the preprocessed images that are ready to be used.
 
 ***Important Note:***
 There are two parameters before training related to the dataset we loaded in earlier: `train_step_size` and `valid_step_size`. These two parameters are calculated based on the number of images in the respective folders divided by the number of images per batches specified in each Image Generator using for those respective folders.
@@ -229,11 +229,42 @@ train_step_size = train_generator.n // train_generator.batch_size
 valid_step_size = valid_generator.n // valid_generator.batch_size
 ```
 
-At this moment, the preparation step is done and the data images are ready to be used for training process.
+At this moment, the preparation step is done and our data images are ready to be used for training process.
 
-### Implementation ###
+### Implementation and Refinement ###
 
-The `include_top` parameter when we initialize the VGG-19 network  makes sure we don't include the original output layer. Hence, in order to fit to our problem, we need to create our custom layers to replace the top layer (output layer) from the original network. We will add a few `Dense` layers and apply some `Dropout` functions to avoid **Overfitting**. It will look like following:
+#### Overview ####
+
+For the main part in this project, which to solve this classification problem, there are many approaches/strategies to use to train our model. In this project, we will try two different approaches to help us reach the optimal performance:
+
+1. The first and most trivial approach is to freeze all the original Convolutional layers in the original pre-trained network and add some extra custom layers in place of the output layers (last/top layer in the original network), then let it be trained after about `30 episodes` to fully make use of the pre-trained weights from **ImageNet**. At the beginning, the **validation accuracy** for this approach only reaches about ` 60%`. The parameter at this time was:
+
+  - Batch size: `32`
+  - Optimizer: `Adam`
+  - Learning rate: `0.001` (or `1e-3`)
+  - Epochs: `20`
+
+Afterwards, I changed the above combination to:
+
+  - Batch size: `64`
+  - Optimizer: `Adam`
+  - Learning rate: `0.00001` (or `1e-5`)
+  - Epochs: `30`
+
+With this new set of parameters, the model has been recorded to produce a result around `80-82%`, which is not a bad result since there was some improvements but also not the best performance at the same time. **Note**: we use **30 episodes** in this case because the model has been observed that it stops improving both the training and validation accuracy afterwards.
+
+2. Another approach we can try is to also freeze all the Convolutional layers in the original pre-trained network and also add extra custom layers just like in the above approach. However, we only let it be trained for about `10 episodes` to give the custom layers a chance to learn about the data. Then after these `10 episodes`, we will un-freeze the last few layers in the original layers and let the model learn again. This time we leave it run for another `20 episodes` and the result has been recorded to stay stable afterwards. `90-92%` has been recorded consistently after a few times re-training from scratch. **Note**: this result has been recorded with the same set of parameters as above:
+
+- Batch size: `64`
+- Optimizer: `Adam`
+- Learning rate: `0.00001` (or `1e-5`)
+- Epochs: `30`
+
+#### Discussion ####
+
+In the following, we will discuss in details about when we implement the second approach.
+
+In details, the `include_top` parameter when we initialize the VGG-19 network makes sure we exclude the original output layer. Hence, in order to fit to our problem, we need to create our custom layers to replace the top layer (output layer) from the original network. We will add a few `Dense` layers and apply some `Dropout` functions to avoid **Overfitting**. It will look like following:
 
 ```
 ## Freezing all the layers from the original network
@@ -264,16 +295,9 @@ The training/validation progress has been recorded as below:
 
 ![final_training_progress](/images/final_training_progress.png)
 
-After acquiring a desired result, we can plot out the `accuracy` and `loss` values for both **Training* and **Validation** folders to validate/evaluate our model. This will be discussed more in the below.
+After acquiring a desired result, we can plot out the `accuracy` and `loss` values for both **Training** and **Validation** folders to validate/evaluate our model. This will be discussed more in the below.
 
-### Refinement
-In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
-- _Has an initial solution been found and clearly reported?_
-- _Is the process of improvement clearly documented, such as what techniques were used?_
-- _Are intermediate and final solutions clearly reported as the process is improved?_
-
-
-## IV. Results
+## IV. Results ##
 _(approx. 2-3 pages)_
 
 ### Model Evaluation and Validation
