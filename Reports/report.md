@@ -300,7 +300,45 @@ After acquiring a desired result, we can plot out the `accuracy` and `loss` valu
 ## IV. Results ##
 _(approx. 2-3 pages)_
 
-### Model Evaluation and Validation
+### Model Evaluation and Validation ###
+
+During the the process of training our model, we kept track of the `training` and `validation` accuracy at every epochs. As shown in the previous screenshots for both `accuracy` and `loss`, both `training accuracy` and `validation accuracy` were increasing together consistently until about the `10th` epoch, then they started crossing path each other and kept increasing slightly for about a few more epochs before staying stable at around `90%` accuracy.
+
+The `losses` also reflect the same behavior as `accuracy` but in the exact opposite manner. And finally produce a loss value around `0.3`.
+
+To achieve this result, I eventually used the same set of parameters as above:
+
+- Batch size: `64`
+- Optimizer: `Adam`
+- Learning rate: `0.00001` (or `1e-5`)
+- Epochs: `30`
+
+These parameters proved to yield the best result so far. I have tried learning rate of `1e-4` or `1e-3` but the model learns pretty slow with them and did not actually manage to reach the optimal state within `30 episodes`.
+
+In order to make sure our model is performing well up to our expectations, we can use the function `evaluate_generator` from **Keras API**, which will take in `validation generator` along with `steps`, batch size for images in the generator, as following:
+
+```
+evaluation = predicted_model.eveluate_generator(valid_generator,
+    steps=valid_generator.batch_size)
+```
+And get validated results:
+
+```
+[0.3419352164330082, 0.9068554383987109]
+```
+
+**Loss** is about `0.3` and **accuracy** is about `90%`, which is not really bad for making predictions.
+
+With this result, it is much better than the benchmark model performance that we tried above (with 11%). Obviously, as a machine learning model, we cannot expect a perfect predictor with **100%** of accuracy when trying to name any kind of flowers. Within its capabilities, a model that can produce an accuracy of around **90%** should be reliable enough to consult from.
+
+However, for a classification problem, where the use case is more about a hit-or-miss kind of problem, `90%` itself is not really robust enough to clearly tell users whether a flower is associated to a certain names. For example, out of 100 times we consult this model for a flower's name, and 10 times we get wrong answers. For some users, this is not enough to trust, and I agree.
+
+In the other hand, when a scenario of predicting a flower's name does not actually damage anything seriously, most of the users can compromise with its performance by giving it another try or just do not take the result seriously. In that case, then this model is appropriate for such applications where entertainment is more preferred than an actual prediction correctness.
+
+Another point about this model is that even if the input data is changed in any ways, it should not affect much the final result since the learning rate is small in this case (`1e-5` or `0.00001`) so it can better find the optimal solution (easier to converge to minimum point using `Gradient Descent`), and also because training images were shuffled when loaded for training, so it should be trained in a different orders when testing.
+
+In my opinion, it really comes down to the use cases where we want to apply this model to predict flowers' names and user's strictnesses on result accuracy.
+
 In this section, the final model and any supporting qualities should be evaluated in detail. It should be clear how the final model was derived and why this model was chosen. In addition, some type of analysis should be used to validate the robustness of this model and its solution, such as manipulating the input data or environment to see how the model’s solution is affected (this is called sensitivity analysis). Questions to ask yourself when writing this section:
 - _Is the final model reasonable and aligning with solution expectations? Are the final parameters of the model appropriate?_
 - _Has the final model been tested with various inputs to evaluate whether the model generalizes well to unseen data?_
