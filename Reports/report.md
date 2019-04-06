@@ -35,6 +35,14 @@ According to [Visual Geometry Group][4] at the University of Oxford:
 
 > The images have large scale, pose and light variations. In addition, there are categories that have large variations within the category and several very similar categories. The dataset is visualized using isomap with shape and colour features.(4)
 
+And the following are the `Isomap` for `Shape` and `Colour` for the flowers provided in [Visual Geometry Group][4]:
+
+##### Shape Isomap #####
+![Shape Isomap](/images/shape_isomap.png)
+
+##### Colour Isomap #####
+![Colour Isomap](/images/colour_isomap.png)
+
 ***References***:
 - http://www.robots.ox.ac.uk/~men/
 - http://www.robots.ox.ac.uk/~az/
@@ -60,7 +68,7 @@ And from there, we can predict the corresponding name for the image by taking th
 > In mathematics, the softmax function, also known as **softargmax** or **normalized exponential function**, is a function that takes as input a vector of K real numbers, and normalizes it into a probability distribution consisting of K probabilities.
 
 #### Measurable ####
-*Accuracy* is a metric we can use to measure our predicting performance since we can clearly observe the percentage of how many images (each represents one flower type) being correctly classified out of 102 flower types.
+`Accuracy` is a metric we can use to measure our predicting performance since we can clearly observe the percentage of how many images (each represents one flower type) being correctly classified out of 102 flower types.
 
 #### Replicable ####
 This classification problem should be reproducible by taking images of different flowers and making predictions accordingly again and again.
@@ -115,7 +123,7 @@ Optionally, we can multiply the result by 100 to turn it into percentage format,
 
 The dataset contains good amount of different flower types (102), with a number of images represent each **class**. Hence, we can directly use them to start training our model without having to bring in more data images from another sources to fill up missing **classes**.
 
-Within this dataset, we have three folders *Training*, *Validation*, and *Testing*, which stand for their own purposes, respectively. Each folder should contains 102 categories, and each category contains **40 to 258 images**. *Training* and *Validation* folders are used for training our model, then we use *Testing* folder to validate our model after training in order to avoid ***overfitting problem***. This can count as part of the pre-processing step for our dataset. Additionally, It is better to verify that our model performs well with new set of images (and not just from images that it already knew). This way we can raise our confidence that it can predict flowers' names that it has never seen before.
+Within this dataset, we have two folders *Training*, *Validation*, which stand for their own purposes, respectively. Each folder should contains 102 categories, and each category contains **40 to 258 images**. *Training* folder is used for training our model, then we use *Validation* folder to validate our model after training in order to avoid ***overfitting*** problem. This can count as part of the pre-processing step for our dataset. Additionally, It is better to verify that our model performs well with new set of images (and not just from images that it already knew). This way we can raise our confidence that it can predict flowers' names that it has never seen before.
 
 *Validation* set contains **818 images**, while *Training* set contains **6652 images**. We recognize that *Validation* set takes about **11%** total number of images original for training by following calculation:
 
@@ -123,7 +131,7 @@ Within this dataset, we have three folders *Training*, *Validation*, and *Testin
 [818 / (818 + 6652)] * 100 = 10.95%
 ```
 
-We need a *Validation* set in order to verify the accuracy of our model after training so that the *Testing* set will be used to test our model's performance without worrying about the case where our model learns too deep into the testing dataset and unable to predict accurately new unseen data (**Overfitting**).
+We need a *Validation* set in order to verify the accuracy of our model after training so that our model does not learns too deep into the testing dataset and unable to predict accurately new unseen data (**Overfitting**).
 
 Since our dataset is mainly based on images, not statistical numbers, we don't have to worry about outliers or missing values messing up our data.
 
@@ -159,7 +167,7 @@ A pre-trained model like VGG-19 will need mandatory parameters such as:
 
 #### Strategy (Algorithm) ####
 
-Since our dataset is considered as a small dataset (< 10,000 images), and quite similar to **imageNet** database, we need a strategy to make sure we train the pre-trained model in an optimized way to fit our problem. For this scenario, we will `freeze` all the pre-trained layers in the original network. In other words, we don't train the original layers again, but using the pre-trained weights from **imageNet** instead.
+Since our dataset is considered as a small dataset (less than 10,000 images), and quite similar to **imageNet** database, we need a strategy to make sure we train the pre-trained model in an optimized way to fit our problem. For this scenario, we will `freeze` all the pre-trained layers in the original network. In other words, we don't train the original layers again, but using the pre-trained weights from **imageNet** instead.
 
 Doing this will allow us to add new extra custom layers in place of the original output layer, so that the model can produce the desire result uniquely to our flower problem.
 
@@ -304,16 +312,16 @@ _(approx. 2-3 pages)_
 
 During the the process of training our model, we kept track of the `training` and `validation` accuracy at every epochs. As shown in the previous screenshots for both `accuracy` and `loss`, both `training accuracy` and `validation accuracy` were increasing together consistently until about the `10th` epoch, then they started crossing path each other and kept increasing slightly for about a few more epochs before staying stable at around `90%` accuracy.
 
-The `losses` also reflect the same behavior as `accuracy` but in the exact opposite manner. And finally produce a loss value around `0.3`.
+The `losses` also reflect the same behaviour as `accuracy` but in the exact opposite manner. And finally produce a loss value around `0.3`.
 
-To achieve this result, I eventually used the same set of parameters as above:
+To achieve this result, I fine-tuned and eventually used the same set of parameters as above:
 
 - Batch size: `64`
 - Optimizer: `Adam`
 - Learning rate: `0.00001` (or `1e-5`)
 - Epochs: `30`
 
-These parameters proved to yield the best result so far. I have tried learning rate of `1e-4` or `1e-3` but the model learns pretty slow with them and did not actually manage to reach the optimal state within `30 episodes`.
+These parameters proved to yield the best result so far. I have tried learning rate of `1e-4` or `1e-3` but the model learns pretty fast with them and did not actually manage to converge to the optimal result, even up to `30 episodes`.
 
 In order to make sure our model is performing well up to our expectations, we can use the function `evaluate_generator` from **Keras API**, which will take in `validation generator` along with `steps`, batch size for images in the generator, as following:
 
@@ -325,11 +333,28 @@ And get validated results:
 
 ```
 [0.3419352164330082, 0.9068554383987109]
+or
+[0.34, 90%]
 ```
 
 **Loss** is about `0.3` and **accuracy** is about `90%`, which is not really bad for making predictions.
 
-With this result, it is much better than the benchmark model performance that we tried above (with 11%). Obviously, as a machine learning model, we cannot expect a perfect predictor with **100%** of accuracy when trying to name any kind of flowers. Within its capabilities, a model that can produce an accuracy of around **90%** should be reliable enough to consult from.
+***Important***:
+Even though the above model has proven to produce about `90%` of validation accuracy, we can see that in the graph, `validation accuracy` starting to stop increasing much like `training accuracy`. And this is a sign of `overfitting`, which leads to the fact that the model starts to learn to well on the training set instead of generalizing the problem. This behaviour also got reflected in the `loss` graph as well.
+
+In order to avoid this, we can stop training around `10 episodes` instead of `20 episodes` as above. And the following result is what we get:
+
+![final result non-overfitting](/images/final_reuslt_non_overfitting.png)
+
+At this point, we can see in the graph that both accuracy will cross path each other at around epoch **10th**. Even if we train more than this, the result for `validation accuracy` will not prove any better than at of now, but the `training accuracy` will keep increasing at the same pace, which will lead to `overfitting` problem. The evaluated result for this final model is as following:
+
+```
+[0.31160519642582357, 0.9098360648335241]
+or
+[0.31, 91%]
+```
+
+With this result, it is much better than the benchmark model performance that we tried above (with `12%`). Obviously, as a machine learning model, we cannot expect a perfect predictor with `100%` of accuracy when trying to name any kind of flowers. Within its capabilities, a model that can produce an accuracy of around `90-91%` should be reasonable enough to consult from.
 
 However, for a classification problem, where the use case is more about a hit-or-miss kind of problem, `90%` itself is not really robust enough to clearly tell users whether a flower is associated to a certain names. For example, out of 100 times we consult this model for a flower's name, and 10 times we get wrong answers. For some users, this is not enough to trust, and I agree.
 
@@ -339,40 +364,69 @@ Another point about this model is that even if the input data is changed in any 
 
 In my opinion, it really comes down to the use cases where we want to apply this model to predict flowers' names and user's strictnesses on result accuracy.
 
+
+
+
+
 In this section, the final model and any supporting qualities should be evaluated in detail. It should be clear how the final model was derived and why this model was chosen. In addition, some type of analysis should be used to validate the robustness of this model and its solution, such as manipulating the input data or environment to see how the model’s solution is affected (this is called sensitivity analysis). Questions to ask yourself when writing this section:
 - _Is the final model reasonable and aligning with solution expectations? Are the final parameters of the model appropriate?_
 - _Has the final model been tested with various inputs to evaluate whether the model generalizes well to unseen data?_
 - _Is the model robust enough for the problem? Do small perturbations (changes) in training data or the input space greatly affect the results?_
 - _Can results found from the model be trusted?_
 
-### Justification
-In this section, your model’s final solution and its results should be compared to the benchmark you established earlier in the project using some type of statistical analysis. You should also justify whether these results and the solution are significant enough to have solved the problem posed in the project. Questions to ask yourself when writing this section:
-- _Are the final results found stronger than the benchmark result reported earlier?_
-- _Have you thoroughly analyzed and discussed the final solution?_
-- _Is the final solution significant enough to have solved the problem?_
+### Justification ###
 
+As discussed above, the benchmark solution we have derived earlier doesn't have good performance initially, but it did serve as a baseline. Then we derived another model with thorough strategy, which yields a much better result and much more reliable predictions (`90%` compared to `12%` of benchmark model). And the final model with the chosen strategy has been discussed along with shown statistics. The main reason came from the fact that we make use of the pre-trained weights from **ImageNet** database by using **VGG-19** network.
 
-## V. Conclusion
-_(approx. 1-2 pages)_
+Hence, we should be able to make use of the model with `90%` performance for our applications in most cases.
 
-### Free-Form Visualization
+## V. Conclusion ##
+
+### Free-Form Visualization ###
+
 In this section, you will need to provide some form of visualization that emphasizes an important quality about the project. It is much more free-form, but should reasonably support a significant result or characteristic about the problem that you want to discuss. Questions to ask yourself when writing this section:
 - _Have you visualized a relevant or important quality about the problem, dataset, input data, or results?_
 - _Is the visualization thoroughly analyzed and discussed?_
 - _If a plot is provided, are the axes, title, and datum clearly defined?_
 
-### Reflection
-In this section, you will summarize the entire end-to-end problem solution and discuss one or two particular aspects of the project you found interesting or difficult. You are expected to reflect on the project as a whole to show that you have a firm understanding of the entire process employed in your work. Questions to ask yourself when writing this section:
-- _Have you thoroughly summarized the entire process you used for this project?_
-- _Were there any interesting aspects of the project?_
-- _Were there any difficult aspects of the project?_
-- _Does the final model and solution fit your expectations for the problem, and should it be used in a general setting to solve these types of problems?_
+### Reflection ###
 
-### Improvement
-In this section, you will need to provide discussion as to how one aspect of the implementation you designed could be improved. As an example, consider ways your implementation can be made more general, and what would need to be modified. You do not need to make this improvement, but the potential solutions resulting from these changes are considered and compared/contrasted to your current solution. Questions to ask yourself when writing this section:
-- _Are there further improvements that could be made on the algorithms or techniques you used in this project?_
-- _Were there algorithms or techniques you researched that you did not know how to implement, but would consider using if you knew how?_
-- _If you used your final solution as the new benchmark, do you think an even better solution exists?_
+In general, for a flower classification problem like this, we need an appropriate set of data images beforehand, which was provided from the University of Oxford as stated at the beginning of this report.
+
+Next, we load the images into `Image Data Generator` so we can apply `Augmentation` technique to the images along with various other parameters, such as `batch_size`, `shuffle`, `color_mode`, `class_mode`, etc. for more diverse characteristic for training and validating.
+
+Then we visualize the input images with their respective labels to see how our data really looks like as batches of images.
+
+We need a benchmark model to make sure this problem is solvable by building a Deep Neural Network, even as simple as having a few `Dense` layers. And we get a result of `12%` of accuracy.
+
+As a must, we need to improve the above accuracy significantly than just `12%`. So `Transfer learning` technique is used in this case where we make use of the pre-trained weights from **VGG-19**, which has been trained through 1000 images from `ImageNet` database. Since our dataset is small (less 10,000 images) and quite similar to images from `ImageNet`, we can apply an appropriate strategy by excluding the top layer (output/predicted layer) from the original network, and adding extra custom layers to fit our problem. Also make sure to freeze all the original layers from **VGG-19**, and let it trained for about `10 episodes` in order to give our new custom layers a chance to gain some knowledge about our dataset. Afterwards, we un-freeze the more Convolutional layers in the original network (**VGG-19**), about `11 layers`, then let it be trained again for another `10 episodes` to reach the optimal performance.
+
+After getting a desired output, we can evaluate the model and visualize the results by putting the predicted labels under its corresponding images.
+
+From this step onwards, we can export the model and convert to appropriate format to integrate to either `Android` or `iOS` platforms, or just use it in any applications from websites as a backend infrastructure.
+
+One of the interesting aspects about this project is that we can play around with the different types of layers, and also the pre-trained model from `ImageNet` to help ourselves achieving better results eventually. At the same time, tuning parameters or try different training strategies, as well as time consuming process for training (even on GPU) makes the entire process more difficult to achieve an optimal results.
+
+In the end, this model somewhat is targeted for different types of entertainment applications rather than serious ones. Hence, I think the results achieved so far was great a research experience and even it is just used for general setting to solve object classification problems, since most of them are similar in many aspects.
+
+### Improvement ###
+
+After creating a Machine Learning model solution for this problem, I have recognized a few things that could make some improvements for this model:
+
+1. Since our dataset are considered as small compared to the amount of data usually collected by a company through years, we can add more data images so that our model can have more knowledge on each categories. Because a Machine learning model is essentially built based on data, the more data we have the better the performance.
+
+2. Also related to data perspective, since each category varies from **40 to 258**, it is not really a `balanced` dataset. And this could affect the performance in some ways when training because of the knowledge from minorities. For example, consider a scenario where a flower category only has few images compared to another category which could contains a lot more images, and the minorities will be more likely picked as prediction when the model hesitates between different multiple predictions. On some other dataset types, we can overcome this situation by using a `oversampling` method like [SMOTE (Synthetic Minority Over-sampling Technique)][9] by generating more similar data points using `k neighbors` technique. In our case, we can generate more images using `Data augmentation` for different transformations for a certain images and add to each minor categories only. This is one of the technique I would love to research more in the future.
+
+3. We can try different extra custom layers and try to un-freeze more `Convolutional layers` in the original network.
+
+4. We can use `K-fold validation` technique as well to make sure each data images is giving a chance to train and validate the model at the same time. This should make sure our model can make use of all the images without locking any of them for validation purposes.
+
+Last but not least, if this final model is made as a benchmark model, after applying more algorithms / techniques as well as adding more data images. There definitely will be better solution which can be achieved if we can spend more time to train and refine the model. There are no end to this kind of problem in the first place since we can even make use of different pre-trained model other than **VGG-19** such as **Xception**, **Inception**, **ResNet** etc. We have so many possibilities to try out with help from GPU power.
+
+***References:***
+- SMOTE: https://en.wikipedia.org/wiki/Oversampling_and_undersampling_in_data_analysis#SMOTE
+
+[9]: https://en.wikipedia.org/wiki/Oversampling_and_undersampling_in_data_analysis#SMOTE "https://en.wikipedia.org/wiki/Oversampling_and_undersampling_in_data_analysis#SMOTE"
 
 -----------
 
