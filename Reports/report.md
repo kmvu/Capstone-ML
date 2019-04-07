@@ -1,7 +1,7 @@
 # Machine Learning Engineer Nanodegree
 ## Capstone Project
 Khang Vu
-December 31st, 2050
+April 7th, 2019
 
 ## I. Definition ##
 
@@ -10,7 +10,7 @@ December 31st, 2050
 #### Background ####
 Consider the case when we are passionate about flowers, and we are curious at the same time about what type of flower they are, what name people usually call them, etc.
 
-What if we can do just that with a little help from technology? Imagine we can use our own phone to take pictures of the flowers, and right away, its name appears afterwards on the screen, and we satisfy. Here comes a use case where we can apply Machine Learning (ML) algorithm to make predictions.
+What if we can do just that with a little help from technology? Imagine we can use our own phone to take pictures of the flowers, and right away, its name appears afterwards on the screen, and we feel satisfied. Here comes a use case where we can apply Machine Learning (ML) algorithm to make predictions.
 
 This classification use case is one of the problem hosted by `Kaggle`, where:
 
@@ -38,10 +38,13 @@ According to [Visual Geometry Group][4] at the University of Oxford:
 And the following are the `Isomap` for `Shape` and `Colour` for the flowers provided in [Visual Geometry Group][4]:
 
 ##### Shape Isomap #####
-![Shape Isomap](/images/shape_isomap.png)
-
+<p align="center">
+    <img src="/images/shape_isomap.png" alt="Shape Isomap" width=500 height=400/>
+</p>
 ##### Colour Isomap #####
-![Colour Isomap](/images/colour_isomap.png)
+<p align="center">
+    <img src="/images/colour_isomap.png" alt="Colour Isomap" width=500 height=400/>
+</p>
 
 ***References***:
 - http://www.robots.ox.ac.uk/~men/
@@ -59,7 +62,7 @@ And the following are the `Isomap` for `Shape` and `Colour` for the flowers prov
 
 #### Quantifiable ####
 
-Given a batch of different types of flowers, and we want to classify them by matching with their corresponding type names. In other words, we will label these flower types by printing their corresponding names under their images as results. In order to figure out the corresponding names for the flowers, we can calculate the probabilities for each **classes** represented by an output layer from a Deep Neural Network, which should produces the maximum likelihood of those classified names.
+Given a batch of different types of flowers, and we want to classify them by matching the flowers to their corresponding type names. In other words, we will label these flower types by printing their corresponding names under their images as results. In order to figure out the corresponding names for the flowers, we can calculate the probabilities for each **classes** represented by an output layer from a Deep Neural Network, which should produces the maximum likelihood of those classified names.
 
 > A deep neural network (DNN) is an artificial neural network (ANN) with multiple layers between the input and output layers. The DNN finds the correct mathematical manipulation to turn the input into the output, whether it be a linear relationship or a non-linear relationship. The network moves through the layers calculating the probability of each output.(5)
 
@@ -68,14 +71,14 @@ And from there, we can predict the corresponding name for the image by taking th
 > In mathematics, the softmax function, also known as **softargmax** or **normalized exponential function**, is a function that takes as input a vector of K real numbers, and normalizes it into a probability distribution consisting of K probabilities.
 
 #### Measurable ####
-`Accuracy` is a metric we can use to measure our predicting performance since we can clearly observe the percentage of how many images (each represents one flower type) being correctly classified out of 102 flower types.
+There are few metrics we can use to measure our model performance such as `Accuracy`, `Precision`, `Recall`, `F1-score`. `Accuracy` is pretty much a straight forward metric which will give us an idea on how much accurate our model can predict, by observing the percentage of how many images being correctly classified out of **102** flower types. However, in some cases, such as for an **unbalanced** dataset, the other three metrics can be used to measure predicting performance better. Our dataset is close enough to unbalanced even though not really significantly, so we will use all four of these metrics for measurement.
 
 #### Replicable ####
 This classification problem should be reproducible by taking images of different flowers and making predictions accordingly again and again.
 
 #### Solution Statement ####
 
-Firstly, we need to make sure our dataset is clean by pre-processing it using various Exploratory Data Analysis ([EDA][6]) concept. Then we will be using a Deep Neural Networks (DNN) at the core to train our data, and calculate the probabilities as final output after making predictions, which will potentially tell us the flower types. We will also use Image Augmentation technique to vary the input types so that the network can learn better in terms of diversity, as part of data pre-processing step. We then use `Accuracy`, and `F1-score` metrics to see how accurate our model performs after training.
+Firstly, we need to make sure our dataset is clean by pre-processing it using various Exploratory Data Analysis ([EDA][6]) concept. Then we will be using a Deep Neural Networks (DNN) at the core to train our data, and calculate the probabilities as final output after making predictions, which will potentially tell us the flower types. We will also use Image Augmentation technique to vary the input types so that the network can learn better in terms of diversity, as part of data pre-processing step. We then use the aforementioned metrics to see how accurate our model performs after training.
 
 > Exploratory Data Analysis refers to the critical process of performing initial investigations on data so as to discover patterns, to spot anomalies, to test hypothesis and to check assumptions with the help of summary statistics and graphical representations.(6)
 
@@ -94,28 +97,35 @@ After all, developers can make use of [CoreML (iOS)][7] or [ML Kit (Android)][8]
 [8]: https://developers.google.com/ml-kit/ "https://developers.google.com/ml-kit/"
 
 ### Metrics ###
-In this section, you will need to clearly define the metrics or calculations you will use to measure performance of a model or result in your project. These calculations and metrics should be justified based on the characteristics of the problem and problem domain. Questions to ask yourself when writing this section:
-- _Are the metrics you’ve chosen to measure the performance of your models clearly discussed and defined?_
-- _Have you provided reasonable justification for the metrics chosen based on the problem and solution?_
 
-As mentioned in Problem Statement, we will be using `Accuracy` to measure our model's performance. In some cases, `Accuracy` is not enough to measure our performance properly and we need to use F-beta score by determining whether we need a high `Recall` score or a high `Precision` score. However, in this case, either `False Positives` or `False Negatives` is not a big problem, because they just simply mean "No, this is not a *xyz* type". So we can use `Accuracy` to measure our model performance.
+As mentioned in Problem Statement, we will be using `Accuracy` to measure our model's performance. In some cases, `Accuracy` is not enough to measure our performance properly and we need to use F-beta score by determining whether we need a high `Recall` score (if the cost for `False Positives` is high) or a high `Precision` score (if the cost for `False Negatives` is high).
 
-*Accuracy* can be calculated as following:
+The four metrics can be calculated as following:
 ```
 Accuracy = (True Positives + True Negatives) / 102 (dataset size)
+Precision = True Positives / (True Positives + False Positives)
+Recall = True Positives / (True Positives + False Negatives)
+F1-score = (2 x Precision * Recall) / (Precision + Recall)
 ```
 
-where:
-  * **True Positives** is the number of images which are correctly classified / predicted.
-  * **True Negatives**, which is not available in this case for a classification problem since we only have either "this type of flower" or "that type of flower".
+*where:*
+  * **True Positives** is number of images ***X***, which are correctly classified / predicted as ***X***.
+  * **True Negatives** is number of images which are predicted as not ***X*** and actually not being ***X***.
+  * **False Positives** is number of images which the model thinks it is ***X*** but actually some other classes ***Y*** or ***Z***.
+  * **False Negatives** is number of images which are predicted as some other flower classes ***Y*** or ***Z*** rather than its actual flower label ***X***.
 
 Hence the formula can be shortened as:
 
 ```
-Accuracy = True Positives / 102
+Accuracy = True Positives / Total number of samples
+Precision = True Positives / Total predicted positives
+Recall = True Positives / Total actual positives
+F1-score is the same as above
 ```
 
-Optionally, we can multiply the result by 100 to turn it into percentage format, if necessary.
+Optionally, we can multiply the result by 100 to turn it into percentage format, if necessary, for displaying purposes.
+
+As in our classifiction problem, what we really need from the solution model is to make sure we can correctly classify the flower's names as many as possible. Hence, we expect our model to have high `Accuracy`, and also high `Recall` as well. For `Precision` and `F1-score`, we can observe the results and compare to the other two since in this unique flower classification problem, `Precision` should be similar to `Recall` case. So is F1-score as it it built based on `Precision` and `Recall`.
 
 ## II. Analysis ##
 
@@ -139,7 +149,9 @@ Since our dataset is mainly based on images, not statistical numbers, we don't h
 
 The following screenshot shows five different flower types, with five images per each category (per row):
 
-![Visualization sample dataset](/images/visualization.png)
+<p align="center">
+    <img src="/images/visualization.png" alt="Visualization sample dataset" width=800 height=550 />
+</p>
 
 Our model will extract the basic characteristics from the images and try to learn patterns from its features, then combine these knowledges to learn even more common complex patterns between the same type of flower and predict the likelihood of flower types eventually as a goal.
 
@@ -200,7 +212,10 @@ bench_model.add(Dropout(0.2))
 bench_model.add(Dense(train_generator.num_classes,
   activation='softmax'))
 ```
-![Benchmark model](/images/benchmark_model.png)
+
+<p align="center">
+<img src="/images/benchmark_model.png" alt="Benchmark model" width=600 height=500/>
+</p>
 
 After five epochs, this benchmark model gives an accuracy of `12.20%`, which is not really good but expected, since this model knows nothing about our current dataset.
 
@@ -293,7 +308,9 @@ This way, once we start training this new customized network, we only spend time
 
 At this point, after `10 epochs` of experimentation, the model has been noticed to produce an accuracy of `65%`, not the best performance but it does show that the learning progress has good potential to learn even more and better if we keep training since both *Training* and *Validation* accuracies are simultaneously increasing with a consistent distant gap in between, as following:
 
-![Training progress](/images/training_progress.png)
+<p align="center">
+<img src="/images/training_progress.png" alt="Training progress" width=400 height=550/>
+</p>
 
 Before proceeding, we save the weights that have been trained so far as a checkpoint for later use.
 
@@ -301,12 +318,13 @@ Next, we will give our model another chance to learn more. But this time, we wil
 
 The training/validation progress has been recorded as below:
 
-![final_training_progress](/images/final_training_progress.png)
+<p align="center">
+<img src="/images/final_training_progress.png" alt="Final training progress" width=400 height=550/>
+</p>
 
 After acquiring a desired result, we can plot out the `accuracy` and `loss` values for both **Training** and **Validation** folders to validate/evaluate our model. This will be discussed more in the below.
 
 ## IV. Results ##
-_(approx. 2-3 pages)_
 
 ### Model Evaluation and Validation ###
 
@@ -344,7 +362,9 @@ Even though the above model has proven to produce about `90%` of validation accu
 
 In order to avoid this, we can stop training around `10 episodes` instead of `20 episodes` as above. And the following result is what we get:
 
-![final result non-overfitting](/images/final_reuslt_non_overfitting.png)
+<p align="center">
+<img src="/images/final_reuslt_non_overfitting.png" alt="final result non-overfitting" width=400 height=550/>
+</p>
 
 At this point, we can see in the graph that both accuracy will cross path each other at around epoch **10th**. Even if we train more than this, the result for `validation accuracy` will not prove any better than at of now, but the `training accuracy` will keep increasing at the same pace, which will lead to `overfitting` problem. The evaluated result for this final model is as following:
 
@@ -384,10 +404,26 @@ Hence, we should be able to make use of the model with `90%` performance for our
 
 ### Free-Form Visualization ###
 
-In this section, you will need to provide some form of visualization that emphasizes an important quality about the project. It is much more free-form, but should reasonably support a significant result or characteristic about the problem that you want to discuss. Questions to ask yourself when writing this section:
-- _Have you visualized a relevant or important quality about the problem, dataset, input data, or results?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
+As a result, the following screenshot captures what has been predicted from our final solution model, which displays each filenames in the separate testing images datasets along with its predictions labels and its actual labels (associated with corresponding order indices).
+
+<p align="center">
+    <img src="/images/predictions.png" alt="Predictions result"/>
+</p>
+
+Here is just a sample screenshot with **24** images, a full result report will be attached along with this project in the `images` folder.
+
+If the above result is a bit hard to really capture how well the model performs, we can also look at the `confusion matrix`, which includes the number of images which are correctly classified accoss the main diagonal axis from the top left corner, as following:
+
+<p align="center">
+    <img src="/images/confusion_matrix.png" alt="confusion matrix"/>
+</p>
+
+What we clearly see is that the `brighter` the color, the more images were correctly classified, and this happens across **102** flower categories.
+
+***Note:***
+
+- x-axis: Actual labels.
+- y-axis: Predicted labels.
 
 ### Reflection ###
 
